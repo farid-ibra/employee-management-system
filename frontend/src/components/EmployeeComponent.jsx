@@ -6,25 +6,33 @@ const EmployeeComponent = () => {
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState("")
 
-    function handleFirstName(e){
+   //Used arrow function instead normal function. 
+   //And after replaced the function itself inside return() function with the name of function
+
+   /* function handleFirstName(e){
         setFirstName(e.target.value);
     }
+    //const handleFirstName = (e) => setFirstName(e.target.value);
+    
 
     function handleLastName(e){
         setLastName(e.target.value);
     }
+    //const handleLastName = (e) => setLastName(e.target.value);
+    
 
     function handleEmail(e){
         setEmail(e.target.value);
     }
-
+    //const handleEmail = (e) => setEmail(e.target.value);
+    */
     function saveEmployee(e){
         e.preventDefault();
         const employee = {firstName, lastName, email}
 
         console.log(employee);
 
-    }
+    } 
 
   return (
     <div className='container'>
@@ -42,7 +50,7 @@ const EmployeeComponent = () => {
                                 name='firstName'
                                 value={firstName}
                                 className='form-control'
-                                onChange={handleFirstName}
+                                onChange={(e) => setFirstName(e.target.value)} //instead of onChange={handleFirstName}
                             >
                             </input>
                         </div>
@@ -55,7 +63,7 @@ const EmployeeComponent = () => {
                                 name='lastName'
                                 value={lastName}
                                 className='form-control'
-                                onChange={handleLastName}
+                                onChange={(e) => setLastName(e.target.value)} 
                             >
                             </input>
                         </div>
@@ -68,7 +76,7 @@ const EmployeeComponent = () => {
                                 name='email'
                                 value={email}
                                 className='form-control'
-                                onChange={handleEmail}
+                                onChange={(e) => setEmail(e.target.value)}
                             >
                             </input>
                         </div>
