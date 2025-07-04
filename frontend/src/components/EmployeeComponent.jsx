@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { createEmployee } from '../services/EmployeeService'
+import React, { useState, useEffect } from 'react'
+import { createEmployee, getEmployee, updateEmployee } from '../services/EmployeeService'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const EmployeeComponent = () => {
@@ -15,6 +15,18 @@ const EmployeeComponent = () => {
         email: ''
     })
     const navigator = useNavigate();
+
+    useEffect (() => {
+        if(id) {
+            getEmployee(id).then((response) => {
+                setFirstName (response.data.firstName);
+                setLastName(response.data.lastName);
+                setEmail(response.data.email);
+        }).catch(error => {
+            console.error(error);
+        })
+        }
+    }, [id])
 
    //Used arrow function instead normal function. 
    //And after replaced the function itself inside return() function with the name of function
@@ -36,7 +48,7 @@ const EmployeeComponent = () => {
     }
     //const handleEmail = (e) => setEmail(e.target.value);
     */
-    function saveEmployee(e){
+    function saveOrUpdateEmployee(e){
         e.preventDefault();
 
         if(validateForm()){
@@ -44,10 +56,22 @@ const EmployeeComponent = () => {
 
         console.log(employee);
  
-        createEmployee(employee).then((response)=>{
-            console.log(response.data)
-            navigator('/employees')
-        })
+        if(id) {
+            updateEmployee (id, employee).then((response) => {
+                console.log(response.data);
+                navigator('/employees');
+            }).catch(error => {
+                console.error(error);
+            })
+        } else {
+            createEmployee (employee).then((response) => {
+                console.log(response.data);
+                navigator('/employees')
+            }).catch(error => {
+                console.error(error);
+            })
+
+        }
       }
     } 
 
@@ -129,7 +153,7 @@ const EmployeeComponent = () => {
                         <div className='form-group mb-2'>
                             <label className='form-label'>Email:</label>
                             <input
-                                type='password'
+                                type='text'
                                 placeholder='Enter email address'
                                 name='email'
                                 value={email}
@@ -140,7 +164,7 @@ const EmployeeComponent = () => {
                             {errors.email && <div className='invalid-feedback'> { errors.email} </div>}
                         </div>
 
-                        <button className='btn btn-success' onClick={saveEmployee}>Submit</button>
+                        <button className='btn btn-success' onClick={saveOrUpdateEmployee}>Submit</button>
                     </form>
                 </div>
             </div>
